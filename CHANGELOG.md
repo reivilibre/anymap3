@@ -1,7 +1,6 @@
-# 1.0.0 (unreleased)
+# 1.0.0 (2024-01-01)
 
-Planned once the dust of 1.0.0-beta.1 settles, since 1.0.0-beta.1 ended up
-being bigger than I’d earlier intended.
+Release of the unreleased version of `anymap` under the name `anymap3`.
 
 # 1.0.0-beta.2 (unreleased)
 
