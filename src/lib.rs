@@ -634,8 +634,12 @@ fn type_id_hasher() {
     fn verify_hashing_with(type_id: TypeId) {
         let mut hasher = TypeIdHasher::default();
         type_id.hash(&mut hasher);
-        // SAFETY: u64 is valid for all bit patterns.
-        assert_eq!(hasher.finish(), unsafe { core::mem::transmute::<TypeId, u64>(type_id) });
+        // SAFETY: u128 and u64 are valid for all bit patterns. Transmute checks the sizes match.
+        // TypeId has a u128 internal value nowadays but only emits the lower 64 bits for its hash.
+        assert_eq!(
+            hasher.finish(),
+            unsafe { core::mem::transmute::<TypeId, u128>(type_id) } as u64
+        );
     }
     // Pick a variety of types, just to demonstrate it’s all sane. Normal, zero-sized, unsized, &c.
     verify_hashing_with(TypeId::of::<usize>());
