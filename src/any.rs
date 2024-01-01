@@ -1,7 +1,7 @@
-use core::fmt;
-use core::any::{Any, TypeId};
 #[cfg(not(feature = "std"))]
 use alloc::boxed::Box;
+use core::any::{Any, TypeId};
+use core::fmt;
 
 #[doc(hidden)]
 pub trait CloneToAny {
@@ -44,7 +44,7 @@ macro_rules! impl_clone {
                 f.pad(stringify!($t))
             }
         }
-    }
+    };
 }
 
 /// Methods for downcasting from an `Any`-like trait object.
@@ -135,8 +135,8 @@ implement!(Any + Send + Sync);
 ///
 /// Every type with no non-`'static` references that implements `Clone` implements `CloneAny`.
 /// See [`core::any`] for more details on `Any` in general.
-pub trait CloneAny: Any + CloneToAny { }
-impl<T: Any + Clone> CloneAny for T { }
+pub trait CloneAny: Any + CloneToAny {}
+impl<T: Any + Clone> CloneAny for T {}
 implement!(CloneAny);
 implement!(CloneAny + Send);
 implement!(CloneAny + Send + Sync);

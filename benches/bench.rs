@@ -6,8 +6,8 @@ extern crate test;
 
 use anymap::AnyMap;
 
-use test::Bencher;
 use test::black_box;
+use test::Bencher;
 
 #[bench]
 fn insertion(b: &mut Bencher) {
