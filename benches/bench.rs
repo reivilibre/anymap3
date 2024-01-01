@@ -1,10 +1,10 @@
 #![feature(test)]
 
-extern crate anymap;
+extern crate anymap3;
 
 extern crate test;
 
-use anymap::AnyMap;
+use anymap3::AnyMap;
 
 use test::black_box;
 use test::Bencher;

@@ -13,7 +13,7 @@ Fortunately, we can do better than these things in Rust. Our type system is quit
 ## Example
 
 ```rust
-let mut data = anymap::AnyMap::new();
+let mut data = anymap3::AnyMap::new();
 assert_eq!(data.get(), None::<&i32>);
 data.insert(42i32);
 assert_eq!(data.get(), Some(&42i32));
@@ -41,18 +41,18 @@ assert_eq!(&*data.get::<Foo>().unwrap().str, "foot");
 
 ## Cargo features/dependencies/usage
 
-Typical Cargo.toml usage, providing `anymap::AnyMap` *et al.* backed by `std::collections::HashMap`:
+Typical Cargo.toml usage, providing `anymap3::AnyMap` *et al.* backed by `std::collections::HashMap`:
 
 ```toml
 [dependencies]
-anymap = "1.0.0-beta.2"
+anymap3 = "1.0.0"
 ```
 
-No-std usage, providing `anymap::hashbrown::AnyMap` *et al.* (note the different path, required because Cargo features are additive) backed by `alloc` and the [hashbrown](https://rust-lang.github.io/hashbrown) crate:
+No-std usage, providing `anymap3::hashbrown::AnyMap` *et al.* (note the different path, required because Cargo features are additive) backed by `alloc` and the [hashbrown](https://rust-lang.github.io/hashbrown) crate:
 
 ```toml
 [dependencies]
-anymap = { version = "1.0.0-beta.2", default-features = false, features = ["hashbrown"] }
+anymap3 = { version = "1.0.0", default-features = false, features = ["hashbrown"] }
 ```
 
 **On stability:** hashbrown is still pre-1.0.0 and experiencing breaking changes. Because it’s useful for a small fraction of users, I am retaining it, but with *different compatibility guarantees to the typical SemVer ones*. Where possible, I will just widen the range for new releases of hashbrown, but if an incompatible change occurs, I may drop support for older versions of hashbrown with a bump to the *minor* part of the anymap version number (e.g. 1.1.0, 1.2.0). Iff you’re using this feature, this is cause to *consider* using a tilde requirement like `"~1.0"` (or spell it out as `>=1, <1.1`).
@@ -71,7 +71,9 @@ It is possible to remove all unsafe code at the cost of only `CloneAny` function
 
 ## Colophon
 
-**Authorship:** [Chris Morgan](https://chrismorgan.info/) is the author and maintainer of this library.
+**Authorship:** [Chris Morgan](https://chrismorgan.info/) is the author of this library.
+
+**Fork Maintainer:** Olivier 'reivilibre' is the maintainer of this fork.
 
 **Licensing:** this library is distributed under the terms of the
 [Blue Oak Model License 1.0.0](https://blueoakcouncil.org/license/1.0.0), the
