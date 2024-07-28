@@ -34,7 +34,32 @@ macro_rules! impl_clone {
                 // ² https://github.com/rust-lang/rust/blob/e7825f2b690c9a0d21b6f6d84c404bb53b151b38/library/alloc/src/boxed.rs#L1613-L1616
                 let clone: Box<dyn CloneAny> = (**self).clone_to_any();
                 let raw: *mut dyn CloneAny = Box::into_raw(clone);
-                unsafe { Box::from_raw(raw as *mut $t) }
+
+                // SAFETY:
+                // There's a future incompat warning ptr_cast_add_auto_to_object tracked in [1]
+                // that warns when you use a pointer cast to add auto traits to a dyn Trait
+                // pointer.
+                //
+                // The issue that it is trying to avoid is that the trait may have methods that
+                // are conditional on the auto traits. e.g.
+                //
+                //    #![feature(arbitrary_self_types)]
+                //    trait Trait {
+                //        fn func(self: *const Self) where Self: Send;
+                //    }
+                //
+                // If this happens then the vtable for dyn Trait and the vtable for dyn Trait + Send
+                // may be different and so casting between pointers to each is UB.
+                //
+                // In our case we only care about the CloneAny trait. It has no methods that are
+                // conditional on any auto traits. This means that the vtable will always be the
+                // same and so the future incompatibility lint doesn't apply here.
+                //
+                // So, to avoid the lint, we use a transmute here instead of a pointer cast. As
+                // described in [1], that is the recommended way to suppress the warning.
+                //
+                // [1]: https://github.com/rust-lang/rust/issues/127323
+                unsafe { Box::from_raw(std::mem::transmute::<*mut dyn CloneAny, *mut _>(raw)) }
             }
         }
 
