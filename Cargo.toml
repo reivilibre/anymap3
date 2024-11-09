@@ -1,6 +1,6 @@
 [package]
 name = "anymap3"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Olivier 'reivilibre' (fork maintainer) <contact@librepush.net>", "Chris Morgan (original author) <rust@chrismorgan.info>"]
 edition = "2018"
 rust-version = "1.36"

@@ -1,3 +1,8 @@
+# 1.0.1 (2024-11-09)
+
+- Suppress future incompatibility lint in CloneToAny impl. Contributed by @swlynch99 — thank you. ([#2](https://github.com/reivilibre/anymap3/pull/2))
+- Expand version range of allowed hashbrown versions to include 0.15.x. ([#3](https://github.com/reivilibre/anymap3/pull/3))
+
 # 1.0.0 (2024-01-01)
 
 Release of the unreleased version of `anymap` under the name `anymap3`.
