@@ -20,4 +20,4 @@ std = []
 
 [dependencies]
 # The hashbrown feature, disabled by default, is exposed under different stability guarantees than the usual SemVer ones: by preference the version range will only be extended, but it may be shrunk in a MINOR release. See README.md.
-hashbrown = { version = ">=0.1.1, <0.13", optional = true }
+hashbrown = { version = ">=0.1.1, <0.16", optional = true }
