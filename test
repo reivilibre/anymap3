@@ -7,7 +7,7 @@ run_tests() {
 		cargo $1 test $release --no-default-features  # Not very useful without std or hashbrown, but hey, it works! (Doctests emit an error about needing a global allocator, but it exits zero anyway. ¯\_(ツ)_/¯)
 		cargo $1 test $release --no-default-features --features hashbrown
 		cargo $1 test $release
-		cargo $1 test $release --all-features
+		cargo $1 test $release --features std,hashbrown
 	done
 }
 
@@ -19,6 +19,10 @@ cp test-oldest-Cargo.lock Cargo.lock
 run_tests +1.36.0
 rm Cargo.lock
 run_tests
+
+# We only test anymore on stable, as it has a 1.82 MSRV.
+cargo test --features anymore
+cargo test --no-default-features --features anymore,hashbrown
 
 cargo clippy
 cargo bench
