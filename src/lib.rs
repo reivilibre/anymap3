@@ -652,6 +652,9 @@ fn type_id_hasher() {
             unsafe { core::mem::transmute::<TypeId, u128>(type_id) } as u64
         );
     }
+    // TODO: As of (presumably) https://github.com/rust-lang/rust/pull/121358, these tests fail
+    // Presumably, this is an endianness issue - debug printing shows that the bits which are output
+    // are a subset of the correct bits.
     // Pick a variety of types, just to demonstrate it’s all sane. Normal, zero-sized, unsized, &c.
     verify_hashing_with(TypeId::of::<usize>());
     verify_hashing_with(TypeId::of::<()>());
