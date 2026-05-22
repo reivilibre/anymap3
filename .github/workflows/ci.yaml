@@ -1,11 +1,25 @@
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        toolchain:
+          - 1.36.0
+          - stable
+        features:
+          # std
+          - ""
+          # std + hashbrown
+          - "--all-features"
+          # no_std
+          - "--no-default-features"
+          # no_std + hashbrown
+          - "--no-default-features --features hashbrown"
     steps:
       - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: "dtolnay/rust-toolchain@${{ matrix.toolchain }}"
       - uses: Swatinem/rust-cache@v2
-      - run: cargo test --all-features
+      - run: "cargo test ${{ matrix.features }}"
 
   lint:
     runs-on: ubuntu-latest
