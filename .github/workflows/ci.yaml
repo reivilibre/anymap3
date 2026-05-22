@@ -23,7 +23,9 @@ jobs:
           - "--no-default-features --features hashbrown"
     steps:
       - uses: actions/checkout@v4
-      - uses: "dtolnay/rust-toolchain@${{ matrix.toolchain }}"
+      - uses: "dtolnay/rust-toolchain@master"
+        with:
+          toolchain: "${{ matrix.toolchain }}"
       - uses: Swatinem/rust-cache@v2
       - run: "cargo test ${{ matrix.features }}"
 
@@ -47,4 +49,3 @@ jobs:
       - run: cargo doc --no-deps --all-features
         env:
           RUSTDOCFLAGS: "-D warnings"
-
