@@ -1,6 +1,6 @@
 [render]
-section_order = ["security", "removal", "feature", "fix", "misc"]
-insert_after = "<!--- -->"
+section_order = ["security", "removal", "feature", "fix", "doc", "misc"]
+insert_after = "<!-- top -->"
 
 [vcs]
 protected = ["master"]
@@ -16,6 +16,9 @@ name = "Features"
 
 [type.fix]
 name = "Bug Fixes"
+
+[type.doc]
+name = "Documentation Changes"
 
 [type.misc]
 name = "Internal Changes"
