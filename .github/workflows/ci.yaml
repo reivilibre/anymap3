@@ -18,11 +18,19 @@ jobs:
           # std
           - ""
           # std + hashbrown
+          - "--features hashbrown"
+          # std + anymore
+          - "--features anymore"
+          # std + hashbrown + anymore
           - "--all-features"
           # no_std
           - "--no-default-features"
           # no_std + hashbrown
           - "--no-default-features --features hashbrown"
+          # no_std + anymore
+          - "--no-default-features --features anymore"
+          # no_std + hashbrown + anymore
+          - "--no-default-features --features hashbrown,anymore"
     steps:
       - uses: actions/checkout@v4
       - uses: "dtolnay/rust-toolchain@master"
