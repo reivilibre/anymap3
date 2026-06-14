@@ -1,8 +1,3 @@
-# Unreleased
-
-- Add support for using `AnyDebug` (from Anymore) as the storage type, for better debugging.
-  This can be enabled through the `anymore` cargo feature.
-  If this feature is enabled, the MSRV is 1.86 (as that is Anymore's MSRV so it can use trait upcasting)
 
 # anymap3 Changelog
 
