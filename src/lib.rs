@@ -573,10 +573,7 @@ macro_rules! everything {
             #[test]
             fn test_extend() {
                 let mut map = AnyMap::new();
-                // (vec![] for 1.36.0 compatibility; more recently, you should use [] instead.)
-                #[cfg(not(feature = "std"))]
-                use alloc::vec;
-                map.extend(vec![Box::new(123) as Box<dyn Any>, Box::new(456), Box::new(true)]);
+                map.extend([Box::new(123) as Box<dyn Any>, Box::new(456), Box::new(true)]);
                 assert_eq!(map.get(), Some(&456));
                 assert_eq!(map.get::<bool>(), Some(&true));
                 assert!(map.get::<Box<dyn Any>>().is_none());
