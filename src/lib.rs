@@ -643,11 +643,29 @@ fn type_id_hasher() {
     fn verify_hashing_with(type_id: TypeId) {
         let mut hasher = TypeIdHasher::default();
         type_id.hash(&mut hasher);
-        // SAFETY: u128 and u64 are valid for all bit patterns. Transmute checks the sizes match.
-        // TypeId has a u128 internal value nowadays but only emits the lower 64 bits for its hash.
-        assert_eq!(
-            hasher.finish(),
-            unsafe { core::mem::transmute::<TypeId, u128>(type_id) } as u64
+
+        // Internally, the TypeId is a 128-bit value and depending on
+        // Rust version it will provide either the top or bottom 64 bits
+        // as hash input.
+        // It's not pretty that we're coupled to this, but at runtime
+        // the assumption around hash input size is memory-safe
+        // (with an additional debug assertion).
+        // This evil transmutation is just about OK for a test.
+        // It will at least alert us when something changes.
+        let raw_internal_value: u128 = unsafe { core::mem::transmute::<TypeId, u128>(type_id) };
+
+        // Bottom bits expected on earlier Rusts
+        let expected_value_old_rust = raw_internal_value as u64;
+        // Top bits expected nowadays
+        let expected_value_new_rust = (raw_internal_value >> 64) as u64;
+
+        let got_value = hasher.finish();
+
+        assert!(
+            got_value == expected_value_old_rust || got_value == expected_value_new_rust,
+            "Hash value from TypeId unexpected. Got {got_value:016x},
+            expected either {expected_value_old_rust:016x} (old Rust)
+            or {expected_value_new_rust:016x} (new Rust)",
         );
     }
     // Pick a variety of types, just to demonstrate it’s all sane. Normal, zero-sized, unsized, &c.
