@@ -32,7 +32,7 @@
 #![warn(missing_docs, unused_results)]
 #![cfg_attr(not(feature = "std"), no_std)]
 
-use core::convert::TryInto;
+use core::convert::TryFrom;
 use core::hash::Hasher;
 
 #[cfg(not(feature = "std"))]
@@ -245,7 +245,7 @@ macro_rules! everything {
 
             /// Gets the entry for the given type in the collection for in-place manipulation
             #[inline]
-            pub fn entry<T: IntoBox<A>>(&mut self) -> Entry<A, T> {
+            pub fn entry<T: IntoBox<A>>(&mut self) -> Entry<'_, A, T> {
                 match self.raw.entry(TypeId::of::<T>()) {
                     hash_map::Entry::Occupied(e) => Entry::Occupied(OccupiedEntry {
                         inner: e,
@@ -573,10 +573,7 @@ macro_rules! everything {
             #[test]
             fn test_extend() {
                 let mut map = AnyMap::new();
-                // (vec![] for 1.36.0 compatibility; more recently, you should use [] instead.)
-                #[cfg(not(feature = "std"))]
-                use alloc::vec;
-                map.extend(vec![Box::new(123) as Box<dyn Any>, Box::new(456), Box::new(true)]);
+                map.extend([Box::new(123) as Box<dyn Any>, Box::new(456), Box::new(true)]);
                 assert_eq!(map.get(), Some(&456));
                 assert_eq!(map.get::<bool>(), Some(&true));
                 assert!(map.get::<Box<dyn Any>>().is_none());
@@ -625,9 +622,10 @@ impl Hasher for TypeIdHasher {
         // contract for safety. But I’m OK with release builds putting everything in one bucket
         // if it *did* change (and debug builds panicking).
         debug_assert_eq!(bytes.len(), 8);
-        let _ = bytes
-            .try_into()
-            .map(|array| self.value = u64::from_ne_bytes(array));
+
+        if let Ok(array) = <[u8; 8]>::try_from(bytes) {
+            self.value = u64::from_ne_bytes(array);
+        }
     }
 
     #[inline]
@@ -645,12 +643,55 @@ fn type_id_hasher() {
     fn verify_hashing_with(type_id: TypeId) {
         let mut hasher = TypeIdHasher::default();
         type_id.hash(&mut hasher);
-        // SAFETY: u128 and u64 are valid for all bit patterns. Transmute checks the sizes match.
-        // TypeId has a u128 internal value nowadays but only emits the lower 64 bits for its hash.
-        assert_eq!(
-            hasher.finish(),
-            unsafe { core::mem::transmute::<TypeId, u128>(type_id) } as u64
-        );
+
+        // Internally, the TypeId is (depending on Rust version)
+        // either a 64-bit or 128-bit value.
+        // Depending on Rust version it will provide either the top
+        // or bottom 64 bits as hash input.
+        // It's not pretty that we're coupled to this, but at runtime
+        // the assumption around hash input size is memory-safe
+        // (with an additional debug assertion).
+        // This evil transmutation is just about OK for a test.
+        // It will at least alert us when something changes.
+
+        if core::mem::size_of::<TypeId>() == core::mem::size_of::<u64>() {
+            // Old Rust only
+            let expected_value_old_rust: u64 =
+                *unsafe { core::mem::transmute::<&TypeId, &u64>(&type_id) };
+
+            let got_value = hasher.finish();
+
+            assert!(
+                got_value == expected_value_old_rust,
+                "Hash value from TypeId unexpected. Got {:016x},
+                expected {:016x} [using TypeId of size u64]",
+                got_value,
+                expected_value_old_rust,
+            );
+        } else {
+            // On newer Rusts, the internal state is currently u128
+            let raw_internal_value: &[u64; 2] =
+                unsafe { core::mem::transmute::<&TypeId, &[u64; 2]>(&type_id) };
+
+            // Even at u128 size, the expected value seems to
+            // depend on version of Rust
+            // (Going by the history of this test code)
+            let expected_value_old_rust = raw_internal_value[0] as u64;
+            let expected_value_new_rust = raw_internal_value[1] as u64;
+
+            let got_value = hasher.finish();
+
+            assert!(
+                got_value == expected_value_old_rust || got_value == expected_value_new_rust,
+                "Hash value from TypeId unexpected. Got {:016x},
+                expected either {:016x} (oldish Rust)
+                or {:016x} (newish Rust) [using TypeId of size {}]",
+                got_value,
+                expected_value_old_rust,
+                expected_value_new_rust,
+                core::mem::size_of::<TypeId>()
+            );
+        }
     }
     // Pick a variety of types, just to demonstrate it’s all sane. Normal, zero-sized, unsized, &c.
     verify_hashing_with(TypeId::of::<usize>());
