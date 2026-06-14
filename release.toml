@@ -1,0 +1,6 @@
+# Build changelog
+pre-release-hook = ["crumbtrail", "apply", "{{version}}"]
+
+# We're not using conventional commits so don't call the release a 'chore'
+pre-release-commit-message = "Release"
+tag-message = "Release"
