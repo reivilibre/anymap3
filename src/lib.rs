@@ -245,7 +245,7 @@ macro_rules! everything {
 
             /// Gets the entry for the given type in the collection for in-place manipulation
             #[inline]
-            pub fn entry<T: IntoBox<A>>(&mut self) -> Entry<A, T> {
+            pub fn entry<T: IntoBox<A>>(&mut self) -> Entry<'_, A, T> {
                 match self.raw.entry(TypeId::of::<T>()) {
                     hash_map::Entry::Occupied(e) => Entry::Occupied(OccupiedEntry {
                         inner: e,
