@@ -168,3 +168,12 @@ implement!(CloneAny + Send + Sync);
 impl_clone!(dyn CloneAny);
 impl_clone!(dyn CloneAny + Send);
 impl_clone!(dyn CloneAny + Send + Sync);
+
+#[cfg(feature = "anymore")]
+use anymore::AnyDebug;
+#[cfg(feature = "anymore")]
+implement!(AnyDebug);
+#[cfg(feature = "anymore")]
+implement!(AnyDebug + Send);
+#[cfg(feature = "anymore")]
+implement!(AnyDebug + Send + Sync);

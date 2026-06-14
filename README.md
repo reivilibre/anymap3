@@ -38,6 +38,7 @@ assert_eq!(&*data.get::<Foo>().unwrap().str, "foot");
 - Add `Send` or `Send + Sync` bounds.
 - You can opt into making the map `Clone`. (In theory you could add all kinds of other functionality, but you can’t readily make this work *generically*, and the bones of it are simple enough that it becomes better to make your own extension of `Any` and reimplement `AnyMap`.)
 - no_std if you like.
+- (Optional) Support for [`anymore`'s `AnyDebug` trait](https://docs.rs/anymore/1.0.0/anymore/trait.AnyDebug.html), for debuggability.
 
 ## Cargo features/dependencies/usage
 
@@ -56,6 +57,10 @@ anymap3 = { version = "1.0.1", default-features = false, features = ["hashbrown"
 ```
 
 **On stability:** hashbrown is still pre-1.0.0 and experiencing breaking changes. Because it’s useful for a small fraction of users, I am retaining it, but with *different compatibility guarantees to the typical SemVer ones*. Where possible, I will just widen the range for new releases of hashbrown, but if an incompatible change occurs, I may drop support for older versions of hashbrown with a bump to the *minor* part of the anymap version number (e.g. 1.1.0, 1.2.0). Iff you’re using this feature, this is cause to *consider* using a tilde requirement like `"~1.0"` (or spell it out as `>=1, <1.1`).
+
+This crate can also be used with `AnyDebug` from the [Anymore](https://docs.rs/anymore/latest/anymore) crate.
+This is enabled using the `anymore` cargo feature.
+(Note that `anymore` has a more constrained Minimum Supported Rust Version.)
 
 ## Unsafe code in this library
 

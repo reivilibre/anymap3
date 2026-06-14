@@ -1,3 +1,4 @@
+
 # anymap3 Changelog
 
 For information about adding a new entry, see the *Contributing* section in the README.
