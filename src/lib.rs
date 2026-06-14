@@ -644,32 +644,54 @@ fn type_id_hasher() {
         let mut hasher = TypeIdHasher::default();
         type_id.hash(&mut hasher);
 
-        // Internally, the TypeId is a 128-bit value and depending on
-        // Rust version it will provide either the top or bottom 64 bits
-        // as hash input.
+        // Internally, the TypeId is (depending on Rust version)
+        // either a 64-bit or 128-bit value.
+        // Depending on Rust version it will provide either the top
+        // or bottom 64 bits as hash input.
         // It's not pretty that we're coupled to this, but at runtime
         // the assumption around hash input size is memory-safe
         // (with an additional debug assertion).
         // This evil transmutation is just about OK for a test.
         // It will at least alert us when something changes.
-        let raw_internal_value: u128 = unsafe { core::mem::transmute::<TypeId, u128>(type_id) };
 
-        // Bottom bits expected on earlier Rusts
-        let expected_value_old_rust = raw_internal_value as u64;
-        // Top bits expected nowadays
-        let expected_value_new_rust = (raw_internal_value >> 64) as u64;
+        if core::mem::size_of::<TypeId>() == core::mem::size_of::<u64>() {
+            // Old Rust only
+            let expected_value_old_rust: u64 =
+                *unsafe { core::mem::transmute::<&TypeId, &u64>(&type_id) };
 
-        let got_value = hasher.finish();
+            let got_value = hasher.finish();
 
-        assert!(
-            got_value == expected_value_old_rust || got_value == expected_value_new_rust,
-            "Hash value from TypeId unexpected. Got {:016x},
-            expected either {:016x} (old Rust)
-            or {:016x} (new Rust)",
-            got_value,
-            expected_value_old_rust,
-            expected_value_new_rust,
-        );
+            assert!(
+                got_value == expected_value_old_rust,
+                "Hash value from TypeId unexpected. Got {:016x},
+                expected {:016x} [using TypeId of size u64]",
+                got_value,
+                expected_value_old_rust,
+            );
+        } else {
+            // On newer Rusts, the internal state is currently u128
+            let raw_internal_value: &[u64; 2] =
+                unsafe { core::mem::transmute::<&TypeId, &[u64; 2]>(&type_id) };
+
+            // Even at u128 size, the expected value seems to
+            // depend on version of Rust
+            // (Going by the history of this test code)
+            let expected_value_old_rust = raw_internal_value[0] as u64;
+            let expected_value_new_rust = raw_internal_value[1] as u64;
+
+            let got_value = hasher.finish();
+
+            assert!(
+                got_value == expected_value_old_rust || got_value == expected_value_new_rust,
+                "Hash value from TypeId unexpected. Got {:016x},
+                expected either {:016x} (oldish Rust)
+                or {:016x} (newish Rust) [using TypeId of size {}]",
+                got_value,
+                expected_value_old_rust,
+                expected_value_new_rust,
+                core::mem::size_of::<TypeId>()
+            );
+        }
     }
     // Pick a variety of types, just to demonstrate it’s all sane. Normal, zero-sized, unsized, &c.
     verify_hashing_with(TypeId::of::<usize>());
