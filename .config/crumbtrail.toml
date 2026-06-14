@@ -1,0 +1,24 @@
+[render]
+section_order = ["security", "removal", "feature", "fix", "doc", "misc"]
+insert_after = "<!-- top -->"
+
+[vcs]
+protected = ["master"]
+
+[type.security]
+name = "Security"
+
+[type.removal]
+name = "Removals and Deprecations"
+
+[type.feature]
+name = "Features"
+
+[type.fix]
+name = "Bug Fixes"
+
+[type.doc]
+name = "Documentation Changes"
+
+[type.misc]
+name = "Internal Changes"

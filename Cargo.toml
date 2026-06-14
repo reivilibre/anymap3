@@ -5,8 +5,8 @@ authors = [
     "Olivier 'reivilibre' (fork maintainer) <contact@librepush.net>",
     "Chris Morgan (original author) <rust@chrismorgan.info>",
 ]
-edition = "2018"
-rust-version = "1.36"
+edition = "2021"
+rust-version = "1.56"
 description = "A safe and convenient store for one value of each type"
 repository = "https://github.com/reivilibre/anymap3"
 keywords = ["container", "any", "map"]

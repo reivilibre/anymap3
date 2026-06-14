@@ -59,7 +59,7 @@ macro_rules! impl_clone {
                 // described in [1], that is the recommended way to suppress the warning.
                 //
                 // [1]: https://github.com/rust-lang/rust/issues/127323
-                unsafe { Box::from_raw(std::mem::transmute::<*mut dyn CloneAny, *mut _>(raw)) }
+                unsafe { Box::from_raw(core::mem::transmute::<*mut dyn CloneAny, *mut _>(raw)) }
             }
         }
 

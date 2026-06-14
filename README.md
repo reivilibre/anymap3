@@ -73,6 +73,38 @@ This library uses a fair bit of unsafe code for several reasons:
 
 It is possible to remove all unsafe code at the cost of only `CloneAny` functionality and a little performance. The `safe` branch in the Git repository contains a couple of commits demonstrating the concept. It’s quite straightforward; the core of this library is very simple and perfectly safe.
 
+## Contributing
+
+Please feel free to open issues and PRs. When opening PRs, please see the section about changelog entries just below.
+
+This crate should ideally stay reasonably minimal and stable, so new features may be worth discussing in an issue first
+to avoid wasting your time!
+
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in this crate by you,
+as defined in the Apache-2.0 license, shall be dual licensed as above, without any additional terms or conditions. 
+
+### Changelog entries
+
+When opening a PR, please add a changelog entry to `changelog.d/<any unique string>.<type>.md`
+
+Types are: `feature`, `fix`, `removal`, `security`, `misc`
+
+For example, `changelog.d/combobulation.feature.md`
+
+Please write in imperative case, ending with a `.` or `!`.
+You are encouraged (but not required) to credit yourself, pointing to any appropriate handle.
+
+Example:
+
+> Add wombat combobulation to the decentralised spark capacitor. Contributed by @reivilibre.
+
+It doesn't have to be perfect; the changelog may get edited at release time, but thank you — this keeps the changelog easy to author.
+
+### Checks
+
+`scripts-dev/check.sh` may be useful for running checks on your code before opening a PR
+and finding yourself in a loop with the CI.
+
 ## Colophon
 
 **Authorship:** [Chris Morgan](https://chrismorgan.info/) is the author of this library.

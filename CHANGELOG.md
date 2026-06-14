@@ -4,16 +4,23 @@
   This can be enabled through the `anymore` cargo feature.
   If this feature is enabled, the MSRV is 1.86 (as that is Anymore's MSRV so it can use trait upcasting)
 
-# 1.0.1 (2024-11-09)
+# anymap3 Changelog
+
+For information about adding a new entry, see the *Contributing* section in the README.
+For unreleased entries, see [`changelog.d`](./changelog.d).
+
+<!-- top -->
+
+## 1.0.1 (2024-11-09)
 
 - Suppress future incompatibility lint in CloneToAny impl. Contributed by @swlynch99 — thank you. ([#2](https://github.com/reivilibre/anymap3/pull/2))
 - Expand version range of allowed hashbrown versions to include 0.15.x. ([#3](https://github.com/reivilibre/anymap3/pull/3))
 
-# 1.0.0 (2024-01-01)
+## 1.0.0 (2024-01-01)
 
 Release of the unreleased version of `anymap` under the name `anymap3`.
 
-# 1.0.0-beta.2 (unreleased)
+## 1.0.0-beta.2 (unreleased)
 
 - Fixed the broken `Extend` implementation added in 1.0.0-beta.1.
 
@@ -26,7 +33,7 @@ Release of the unreleased version of `anymap` under the name `anymap3`.
   `RawMap` remains, despite not being *required*, as an ergonomic improvement.
   With this, we’re back to proper completely additive Cargo features.
 
-# 1.0.0-beta.1 (2022-01-25)
+## 1.0.0-beta.1 (2022-01-25)
 
 - Removed `anymap::any::Any` in favour of just plain `core::any::Any`, since its
   `Send`/`Sync` story is now long stable.
@@ -66,34 +73,34 @@ Release of the unreleased version of `anymap` under the name `anymap3`.
 - Worked around the spurious `where_clauses_object_safety` future-compatibility lint that has been raised since mid-2018.
   If you put `#![allow(where_clauses_object_safety)]` on your binary crates for this reason, you can remove it.
 
-# 0.12.1 (2017-01-20)
+## 0.12.1 (2017-01-20)
 
 - Remove superfluous Clone bound on Entry methods (#26)
 - Consistent application of `#[inline]` where it should be
 - Fix bad performance (see 724f94758def9f71ad27ff49e47e908a431c2728 for details)
 
-# 0.12.0 (2016-03-05)
+## 0.12.0 (2016-03-05)
 
 - Ungate `drain` iterator (stable from Rust 1.6.0)
 - Ungate efficient hashing (stable from Rust 1.7.0)
 - Remove `unstable` Cargo feature (in favour of a `bench` feature for benchmarking)
 
-# 0.11.2 (2016-01-22)
+## 0.11.2 (2016-01-22)
 
 - Rust warning updates only
 
-# 0.11.1 (2015-06-24)
+## 0.11.1 (2015-06-24)
 
 - Unstable Rust compatibility updates
 
-# 0.11.0 (2015-06-10)
+## 0.11.0 (2015-06-10)
 
 - Support concurrent maps (`Send + Sync` bound)
 - Rename `nightly` feature to `unstable`
 - Implement `Debug` for `Map` and `RawMap`
 - Replace `clone` Cargo feature with arcane DST magicks
 
-# Older releases (from the initial code on 2014-06-12 to 0.10.3 on 2015-04-18)
+## Older releases (from the initial code on 2014-06-12 to 0.10.3 on 2015-04-18)
 
 I’m not giving a changelog for these artefacts of ancient history.
 If you really care you can look through the Git history easily enough.
