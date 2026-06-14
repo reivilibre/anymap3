@@ -38,6 +38,7 @@ assert_eq!(&*data.get::<Foo>().unwrap().str, "foot");
 - Add `Send` or `Send + Sync` bounds.
 - You can opt into making the map `Clone`. (In theory you could add all kinds of other functionality, but you can’t readily make this work *generically*, and the bones of it are simple enough that it becomes better to make your own extension of `Any` and reimplement `AnyMap`.)
 - no_std if you like.
+- (Optional) Support for [`anymore`'s `AnyDebug` trait](https://docs.rs/anymore/1.0.0/anymore/trait.AnyDebug.html), for debuggability.
 
 ## Cargo features/dependencies/usage
 
