@@ -59,7 +59,7 @@ anymap3 = { version = "1.0.1", default-features = false, features = ["hashbrown"
 
 This crate can also be used with `AnyDebug` from the [Anymore](https://docs.rs/anymore/latest/anymore) crate.
 This is enabled using the `anymore` cargo feature.
-If this feature is enabled, this crate's MSRV is the same as Anymore's.
+(Note that `anymore` has a more constrained Minimum Supported Rust Version.)
 
 ## Unsafe code in this library
 
