@@ -6,6 +6,22 @@ For unreleased entries, see [`changelog.d`](./changelog.d).
 
 <!-- top -->
 
+## 1.1.0 (2026-06-14)
+
+### Removals and Deprecations
+
+- Increase Minimum Supported Rust Version (MSRV) to 1.56 (October 2021). ([#7](https://github.com/reivilibre/anymap3/pull/7))
+
+### Features
+
+- Support the `AnyDebug` trait from the [`anymore` crate](https://github.com/linebender/anymore). Enable with `anymore` crate feature. Contributed by @DJMcNab — thank you. ([#5](https://github.com/reivilibre/anymap3/pull/5))
+
+### Internal Changes
+
+- Add CI for tests and linting. ([#6](https://github.com/reivilibre/anymap3/pull/6))
+- Fix our tests to work with new Rust versions, which changed the internal representation of `TypeId`. Runtime behaviour was unaffected. ([#7](https://github.com/reivilibre/anymap3/pull/7))
+
+
 ## 1.0.1 (2024-11-09)
 
 - Suppress future incompatibility lint in CloneToAny impl. Contributed by @swlynch99 — thank you. ([#2](https://github.com/reivilibre/anymap3/pull/2))
