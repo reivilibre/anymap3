@@ -663,9 +663,12 @@ fn type_id_hasher() {
 
         assert!(
             got_value == expected_value_old_rust || got_value == expected_value_new_rust,
-            "Hash value from TypeId unexpected. Got {got_value:016x},
-            expected either {expected_value_old_rust:016x} (old Rust)
-            or {expected_value_new_rust:016x} (new Rust)",
+            "Hash value from TypeId unexpected. Got {:016x},
+            expected either {:016x} (old Rust)
+            or {:016x} (new Rust)",
+            got_value,
+            expected_value_old_rust,
+            expected_value_new_rust,
         );
     }
     // Pick a variety of types, just to demonstrate it’s all sane. Normal, zero-sized, unsized, &c.
