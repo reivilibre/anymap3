@@ -12,7 +12,10 @@ jobs:
       fail-fast: false
       matrix:
         toolchain:
+          # Our MSRV
           - 1.56.0
+          # Anymore MSRV
+          - 1.86.0
           - stable
         features:
           # std
@@ -31,6 +34,16 @@ jobs:
           - "--no-default-features --features anymore"
           # no_std + hashbrown + anymore
           - "--no-default-features --features hashbrown,anymore"
+        exclude:
+          # Anymore won't run on 1.56.0
+          - toolchain: 1.56.0
+            features: "--features anymore"
+          - toolchain: 1.56.0
+            features: "--all-features"
+          - toolchain: 1.56.0
+            features: "--no-default-features --features anymore"
+          - toolchain: 1.56.0
+            features: "--no-default-features --features hashbrown,anymore"
     steps:
       - uses: actions/checkout@v4
       - uses: "dtolnay/rust-toolchain@master"
