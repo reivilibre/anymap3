@@ -14,7 +14,7 @@ Fortunately, we can do better than these things in Rust. Our type system is quit
 
 ```rust
 let mut data = anymap3::AnyMap::new();
-assert_eq!(data.get(), None::<&i32>);
+assert_eq!(data.get::<i32>(), None);
 data.insert(42i32);
 assert_eq!(data.get(), Some(&42i32));
 data.remove::<i32>();
